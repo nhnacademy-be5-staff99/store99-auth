@@ -28,5 +28,6 @@
 
     <root level="INFO">
         <appender-ref ref="LNCS-APPENDER"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
