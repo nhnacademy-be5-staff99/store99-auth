@@ -59,7 +59,7 @@ alt 토큰 만료
     gateway-->>front: 2. 인증 실패
     front-->>c: 3. 로그인 페이지 리다이렉트
 else 토큰 사용 가능
-    gateway-->>redis: 2. 토큰으로 구매자 id 조회
+    gateway-->>redis: 2. UUID 로 구매자 id 조회
     redis->>gateway: 3. 구매자 id 전달
     gateway->>store: 4. header에 구매자 id 담아 마이페이지 api 호출
     Note over store: 구매자 id 로 회원 권한 조회
@@ -98,9 +98,9 @@ alt 토큰 만료
     gateway-->>front: 2. 인증 실패
     front-->>c: 3. 로그인 페이지 리다이렉트
 else 토큰 사용 가능
-    gateway-->>redis: 2. 토큰으로 구매자 id 조회
+    gateway-->>redis: 2. UUID 로 구매자 id 조회
     redis->>gateway: 3. 구매자 id 전달
-    gateway-->>store: 4. header에 구매자 id 담아 관리자 권한 확인 api 호출
+    gateway->>store: 4. header에 구매자 id 담아 관리자 권한 확인 api 호출
     Note over store: 구매자 id 로 관리자 권한 확인
     alt 권한 없음
         store-->>gateway: 5. 권한 없음 응답
