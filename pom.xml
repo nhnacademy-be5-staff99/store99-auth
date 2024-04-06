@@ -17,6 +17,7 @@
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -47,12 +48,17 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- eureka & feign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
 
         <dependency>
@@ -60,10 +66,18 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- log & crash -->
+        <dependency>
+            <groupId>nhn.logncrash</groupId>
+            <artifactId>toast-logncrash-logback-sdk</artifactId>
+            <version>3.0.5</version>
         </dependency>
 
         <!-- log & crash require dependency -->
@@ -79,17 +93,12 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5</version>
         </dependency>
-        <!-- log & crash -->
-		<dependency>
-			<groupId>nhn.logncrash</groupId>
-			<artifactId>toast-logncrash-logback-sdk</artifactId>
-			<version>3.0.5</version>
-		</dependency>
 
         <!-- spring security -->
         <dependency>
@@ -126,16 +135,8 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!-- open feign -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-
 
     </dependencies>
-
-
 
     <build>
         <finalName>auth</finalName>
