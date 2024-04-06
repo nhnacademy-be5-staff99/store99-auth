@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 public class JwtTokenService {
 
     private final JwtUtil jwtUtil;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public JwtTokenService (JwtUtil jwtUtil, RedisTemplate<String, String> redisTemplate) {
+    public JwtTokenService(JwtUtil jwtUtil, RedisTemplate<String, Object> redisTemplate) {
         this.jwtUtil = jwtUtil;
         this.redisTemplate = redisTemplate;
     }
@@ -22,13 +22,15 @@ public class JwtTokenService {
 
     /**
      * 새로운 토큰 발급
-     *
+     * <p>
      * jti(uuid)를 payload 로 하는 토큰 발급
-     * redis 에 uuid 와 실제 사용자의 구매자 id 저장
+     * redis 에 uuid 와 실제 사용자의 id 저장
+     *
      * @param
      * @return accessToken
      */
-    public String tokenIssue(String userId) {
+    public String tokenIssue(Long userId) {
+        // userId 를 대신할 uuid 생성
         String uuid = UUID.randomUUID().toString();
 
         String accessToken = jwtUtil.createAccessToken(uuid);
