@@ -4,9 +4,9 @@ import com.nhnacademy.store99.auth.adapter.LoginOpenFeign;
 import com.nhnacademy.store99.auth.dto.AuthorizationRequest;
 import com.nhnacademy.store99.auth.dto.AuthorizationResponse;
 import com.nhnacademy.store99.auth.exception.NotUserInBookStoreException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -46,13 +46,12 @@ public class CustomUserDetailService implements UserDetailsService {
 
         AuthorizationResponse user = response.getBody();
 
-        // user 정보 중 권한을 list 로 변경
-        List<SimpleGrantedAuthority> auths =
-                Objects.requireNonNull(user).getResult().getAuth().stream().map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        // user 정보 중 권한을 SimpleGrantedAuthority 객체로 변환
+        SimpleGrantedAuthority authority =
+                new SimpleGrantedAuthority(Objects.requireNonNull(user).getResult().getAuth());
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(authority);
 
-
-        return new User(user.getResult().getUserId().toString(), user.getResult().getPassword(), auths);
+        return new User(user.getResult().getUserId().toString(), user.getResult().getPassword(), authorities);
     }
 
 

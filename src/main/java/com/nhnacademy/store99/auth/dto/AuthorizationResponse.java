@@ -1,7 +1,6 @@
 package com.nhnacademy.store99.auth.dto;
 
 import com.nhnacademy.store99.auth.common.CommonHeader;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ public class AuthorizationResponse {
         private Long userId;
         private String password;
         private String email;
-        private List<String> auth;
+        private String auth;
     }
 
 }

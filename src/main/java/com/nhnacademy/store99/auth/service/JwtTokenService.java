@@ -2,6 +2,7 @@ package com.nhnacademy.store99.auth.service;
 
 import com.nhnacademy.store99.auth.util.JwtUtil;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
  * Jwt 토큰 발급 및 Redis 에 UUID 저장
  */
 @Service
+@Slf4j
 public class JwtTokenService {
 
     private final JwtUtil jwtUtil;
@@ -36,6 +38,8 @@ public class JwtTokenService {
         String accessToken = jwtUtil.createAccessToken(uuid);
 
         redisTemplate.opsForValue().set(uuid, userId);
+
+        log.debug("토큰 발급 완료 : {}", accessToken);
 
         return accessToken;
     }

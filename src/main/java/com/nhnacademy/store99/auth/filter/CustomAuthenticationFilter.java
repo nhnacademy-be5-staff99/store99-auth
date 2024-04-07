@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public static final String EXP_HEADER = "Expires";
-    private static final String TOKEN_HEADER = "Authorization";
+    private static final String TOKEN_HEADER = "X-USER-TOKEN";
     private static final String BEARER_PREFIX = "Bearer ";
     private final CustomAuthenticationProvider authenticationProvider;
     private final JwtTokenService jwtTokenService;
