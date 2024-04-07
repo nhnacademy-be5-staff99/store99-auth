@@ -2,8 +2,10 @@ package com.nhnacademy.store99.auth.common;
 
 import java.util.Objects;
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class CommonHeader {
     private final boolean isSuccessful;
     private final HttpStatus httpStatus;

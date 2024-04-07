@@ -1,6 +1,8 @@
 package com.nhnacademy.store99.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.store99.auth.common.CommonHeader;
+import com.nhnacademy.store99.auth.common.CommonResponse;
 import com.nhnacademy.store99.auth.dto.LoginRequest;
 import com.nhnacademy.store99.auth.exception.LoginDtoNotParsingException;
 import com.nhnacademy.store99.auth.provider.CustomAuthenticationProvider;
@@ -12,6 +14,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -72,8 +75,25 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
 
-        Long userId = (Long) authResult.getPrincipal();
+        String username = (String) authResult.getPrincipal();
+        Long userId = Long.parseLong(username);
         String accessToken = jwtTokenService.tokenIssue(userId);
+
+        CommonHeader header = CommonHeader.builder()
+                .httpStatus(HttpStatus.OK)
+                .resultMessage("Authentication successful")
+                .build();
+
+        CommonResponse<String> commonResponse = CommonResponse.<String>builder()
+                .header(header)
+                .result("로그인 및 토큰 발급 성공")
+                .build();
+
+        String responseBody = objectMapper.writeValueAsString(commonResponse);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(responseBody);
 
         response.setHeader(TOKEN_HEADER, BEARER_PREFIX + accessToken);
         response.setHeader(EXP_HEADER, String.valueOf(new Date().getTime() + JwtUtil.ACCESS_TOKEN_EXPIRED_TIME));
