@@ -16,6 +16,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
+/**
+ * @author Ahyeon Song
+ */
 @Service
 public class CustomUserDetailService implements UserDetailsService {
     private final LoginOpenFeign loginOpenFeign;
@@ -26,7 +29,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     /**
      * bookstore server api 를 호출해 사용자의 정보를 가져온다
-     * User Details : Spring security 에서 사용자의 정보를 담고있는 메소드
+     * <p>User Details : Spring security 에서 사용자의 정보를 담고있는 메소드
      *
      * @param email
      * @return UserDetails

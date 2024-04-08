@@ -8,13 +8,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * @author Ahyeon Song
+ */
 @Slf4j
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
     /**
      * 실제 인증 로직을 처리
-     * 사용자의 id 와 비밀번호 검증
-     * 검증이 완료되면 인증된 Authentication 객체를 반환
+     *
+     * <p>사용자의 id 와 비밀번호 검증
+     * <p>검증이 완료되면 인증된 Authentication 객체를 반환
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

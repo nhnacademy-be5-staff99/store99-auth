@@ -20,6 +20,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * 토큰 생성, 파싱, 만료 기간 검사
+ *
+ * @author Ahyeon Song
  */
 @Slf4j
 @Component

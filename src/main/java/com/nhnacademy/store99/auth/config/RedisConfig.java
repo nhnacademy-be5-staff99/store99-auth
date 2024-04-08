@@ -13,6 +13,9 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 
+/**
+ * @author Ahyeon Song
+ */
 @Configuration
 public class RedisConfig implements BeanClassLoaderAware {
     private final RedisProperties redisProperties;

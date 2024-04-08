@@ -3,6 +3,9 @@ package com.nhnacademy.store99.auth.dto;
 import com.nhnacademy.store99.auth.common.CommonHeader;
 import lombok.Getter;
 
+/**
+ * @author Ahyeon Song
+ */
 @Getter
 public class LoginResponse {
     private final CommonHeader commonHeader;

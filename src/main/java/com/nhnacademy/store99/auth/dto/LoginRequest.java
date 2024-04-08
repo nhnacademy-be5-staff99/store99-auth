@@ -3,6 +3,9 @@ package com.nhnacademy.store99.auth.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * @author Ahyeon Song
+ */
 @Getter
 @AllArgsConstructor
 public class LoginRequest {

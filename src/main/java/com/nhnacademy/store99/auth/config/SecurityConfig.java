@@ -17,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * @author Ahyeon Song
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -63,9 +66,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /*
+    /**
      * AuthenticationProvider 를 관리
-     * AuthenticationFilter 로부터 Authentication 객체를 받아 AuthenticationProvider 에게 인증 역할 위임
+     *
+     * <p>AuthenticationFilter 로부터 Authentication 객체를 받아 AuthenticationProvider 에게 인증 역할 위임
      */
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -75,13 +79,12 @@ public class SecurityConfig {
 
     /**
      * authenticationFilter 설정
-     * <p>
-     * front 의 /auth/login 요청을 받음
-     * 요청 파라미터 중 email 을 username 으로 인식
-     * 요청 파라미터 중 password 를 password 로 인식
+     *
+     * <p>front 의 v1/auth/login 요청을 받음
+     * <p>요청 파라미터 중 email 을 username 으로 인식
+     * <p>요청 파라미터 중 password 를 password 로 인식
      *
      * @param jwtTokenService
-     * @return
      * @throws Exception
      */
     @Bean

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 /**
  * Jwt 토큰 발급 및 Redis 에 UUID 저장
+ *
+ * @author Ahyeon Song
  */
 @Service
 @Slf4j
@@ -21,14 +23,13 @@ public class JwtTokenService {
         this.redisTemplate = redisTemplate;
     }
 
-
     /**
      * 새로운 토큰 발급
      * <p>
      * jti(uuid)를 payload 로 하는 토큰 발급
      * redis 에 uuid 와 실제 사용자의 id 저장
      *
-     * @param
+     * @param userId
      * @return accessToken
      */
     public String tokenIssue(Long userId) {

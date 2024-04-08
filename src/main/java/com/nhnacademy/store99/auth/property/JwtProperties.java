@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * @author Ahyeon Song
+ */
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "store99.jwt")

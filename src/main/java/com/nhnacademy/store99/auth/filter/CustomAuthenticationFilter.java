@@ -20,7 +20,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
+/**
+ * @author Ahyeon Song
+ */
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public static final String EXP_HEADER = "Expires";
@@ -39,8 +41,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     /**
      * 인증 요청을 가로채, 미 인증된 Authentication 객체 생성
-     * object mapper 를 이용해 요청을 loginRequest 객체로 변환
-     * 생성된 객체를 AuthenticationManager 에게 전달
+     *
+     * <p>object mapper 를 이용해 요청을 loginRequest 객체로 변환
+     * <p>생성된 객체를 AuthenticationManager 에게 전달
+     *
+     * @return Authentication
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -62,9 +67,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     /**
      * 인증 실행 시 수행
-     * <p>
-     * authResult 에는 인증 과정을 거친 사용자 정보가 담김
-     * access token 을 발급하여 header 에 담아 전달
+     * <p>authResult 에는 인증 과정을 거친 사용자 정보가 담김
+     * <p>access token 을 발급하여 header 에 담아 전달
      *
      * @param request
      * @param response
