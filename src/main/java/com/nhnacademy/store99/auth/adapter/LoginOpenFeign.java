@@ -7,7 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "LoginOpenFeign", url = "${store99.gateway.url.api.bookstore}")
+/**
+ * @author Ahyeon Song
+ */
+@FeignClient(value = "store99-gateway-service", path = "/open/bookstore")
 public interface LoginOpenFeign {
 
     @PostMapping(value = "/v1/user/login")
