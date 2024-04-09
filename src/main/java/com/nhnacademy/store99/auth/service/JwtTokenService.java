@@ -41,8 +41,7 @@ public class JwtTokenService {
         String accessToken = jwtUtil.createAccessToken(uuid);
 
         redisTemplate.opsForValue().set(uuid, userId, REDIS_UUID_USERID_EXPIRED_TIME, TimeUnit.HOURS);
-
-        log.debug("토큰 발급 완료 : {}", accessToken);
+        log.debug("토큰 발급 및 Redis 저장 완료");
 
         return accessToken;
     }
