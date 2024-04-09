@@ -1,6 +1,6 @@
 package com.nhnacademy.store99.auth.provider;
 
-import com.nhnacademy.store99.auth.exception.NotFoundByPasswordException;
+import com.nhnacademy.store99.auth.exception.PasswordNotMatchException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,7 +32,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
         boolean matches = this.getPasswordEncoder().matches(password, user.getPassword());
 
         if (!matches) {
-            throw new NotFoundByPasswordException("비밀번호가 일치하지 않음");
+            throw new PasswordNotMatchException("비밀번호가 일치하지 않음");
         }
 
         // 인증된 authentication token 생성

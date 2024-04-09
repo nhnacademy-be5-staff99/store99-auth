@@ -57,7 +57,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
 
         } catch (IOException e) {
-            throw new LoginDtoNotParsingException();
+            throw new LoginDtoNotParsingException("로그인 형식 Parsing 에러");
         }
 
         UsernamePasswordAuthenticationToken token =

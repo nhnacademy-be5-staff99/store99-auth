@@ -1,7 +1,9 @@
 package com.nhnacademy.store99.auth.exception;
 
-public class NotUserInBookStoreException extends RuntimeException {
-    public NotUserInBookStoreException(String message, Throwable cause) {
-        super(message, cause);
+import com.nhnacademy.store99.auth.common.exception.NotFoundException;
+
+public class NotUserInBookStoreException extends NotFoundException {
+    public NotUserInBookStoreException(String email) {
+        super(String.format("User not found (UserEmail: %s)", email));
     }
 }

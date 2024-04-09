@@ -1,6 +1,6 @@
 package com.nhnacademy.store99.auth.service;
 
-import com.nhnacademy.store99.auth.adapter.LoginOpenFeign;
+import com.nhnacademy.store99.auth.adapter.LoginAdapter;
 import com.nhnacademy.store99.auth.dto.AuthorizationRequest;
 import com.nhnacademy.store99.auth.dto.AuthorizationResponse;
 import com.nhnacademy.store99.auth.exception.NotUserInBookStoreException;
@@ -21,10 +21,10 @@ import org.springframework.web.client.HttpClientErrorException;
  */
 @Service
 public class CustomUserDetailService implements UserDetailsService {
-    private final LoginOpenFeign loginOpenFeign;
+    private final LoginAdapter loginAdapter;
 
-    public CustomUserDetailService(LoginOpenFeign loginOpenFeign) {
-        this.loginOpenFeign = loginOpenFeign;
+    public CustomUserDetailService(LoginAdapter loginAdapter) {
+        this.loginAdapter = loginAdapter;
     }
 
     /**
@@ -41,10 +41,10 @@ public class CustomUserDetailService implements UserDetailsService {
 
         try {
             // feign client 를 통해 bookstore server 에서 user 정보 조회
-            response = loginOpenFeign.userLogin(new AuthorizationRequest(email));
+            response = loginAdapter.userLogin(new AuthorizationRequest(email));
 
         } catch (HttpClientErrorException e) {
-            throw new NotUserInBookStoreException("bookstore server 에서 user 조회 실패", e);
+            throw new NotUserInBookStoreException(email);
         }
 
         AuthorizationResponse user = response.getBody();
