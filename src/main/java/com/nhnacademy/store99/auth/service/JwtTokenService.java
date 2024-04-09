@@ -2,6 +2,7 @@ package com.nhnacademy.store99.auth.service;
 
 import com.nhnacademy.store99.auth.util.JwtUtil;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class JwtTokenService {
 
     private final JwtUtil jwtUtil;
     private final RedisTemplate<String, Object> redisTemplate;
+    private static final Long REDIS_UUID_USERID_EXPIRED_TIME = 1L;
 
     public JwtTokenService(JwtUtil jwtUtil, RedisTemplate<String, Object> redisTemplate) {
         this.jwtUtil = jwtUtil;
@@ -38,7 +40,7 @@ public class JwtTokenService {
 
         String accessToken = jwtUtil.createAccessToken(uuid);
 
-        redisTemplate.opsForValue().set(uuid, userId);
+        redisTemplate.opsForValue().set(uuid, userId, REDIS_UUID_USERID_EXPIRED_TIME, TimeUnit.HOURS);
 
         log.debug("토큰 발급 완료 : {}", accessToken);
 
