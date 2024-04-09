@@ -18,6 +18,11 @@ public class JwtProperties {
 
     private String secret;
 
+    /**
+     * secure key manager 로부터 key 를 가져옴
+     *
+     * @param secret
+     */
     public void setSecret(final String secret) {
         if (secureKeyManagerUtil.isEncrypted(secret)) {
             this.secret = secureKeyManagerUtil.loadConfidentialData(secret);

@@ -1,6 +1,7 @@
 # store99-auth
 
 ## Login Sequence
+
 ```mermaid
 
 sequenceDiagram
@@ -37,8 +38,8 @@ end
 
 ```
 
-
 ## Authorization Sequence
+
 > 예시 : 마이페이지 요청
 
 ```mermaid
@@ -76,7 +77,6 @@ else 토큰 사용 가능
 end
 
 ```
-
 
 ## Admin Authorization Sequence
 

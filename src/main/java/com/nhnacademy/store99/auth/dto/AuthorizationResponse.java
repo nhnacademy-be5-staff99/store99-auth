@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Ahyeon Song
+ * <p>
+ * bookstore server 로부터 응답받는 형식
  */
 @Getter
 @AllArgsConstructor

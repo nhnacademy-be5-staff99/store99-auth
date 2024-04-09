@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class JwtTokenService {
 
+    private static final Long REDIS_UUID_USERID_EXPIRED_TIME = 1L;
     private final JwtUtil jwtUtil;
     private final RedisTemplate<String, Object> redisTemplate;
-    private static final Long REDIS_UUID_USERID_EXPIRED_TIME = 1L;
 
     public JwtTokenService(JwtUtil jwtUtil, RedisTemplate<String, Object> redisTemplate) {
         this.jwtUtil = jwtUtil;
