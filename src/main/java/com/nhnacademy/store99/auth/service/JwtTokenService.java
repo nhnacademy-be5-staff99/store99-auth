@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class JwtTokenService {
 
-    private static final Long REDIS_UUID_USERID_EXPIRED_TIME = 1L;
+    private static final Long REDIS_UUID_USERID_EXPIRED_TIME = 30L;
     private final JwtUtil jwtUtil;
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -41,7 +41,7 @@ public class JwtTokenService {
         String accessToken = jwtUtil.createAccessToken(uuid);
 
         redisTemplate.opsForValue().set(uuid, userId);
-        redisTemplate.expire(uuid, REDIS_UUID_USERID_EXPIRED_TIME, TimeUnit.HOURS);
+        redisTemplate.expire(uuid, REDIS_UUID_USERID_EXPIRED_TIME, TimeUnit.DAYS);
 
         log.debug("토큰 발급 및 Redis 저장 완료");
 
