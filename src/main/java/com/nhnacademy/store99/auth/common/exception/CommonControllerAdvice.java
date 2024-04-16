@@ -85,19 +85,4 @@ public class CommonControllerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(commonResponse);
     }
 
-    /**
-     * /v1/auth/login 요청이 POST 가 아닌 다른 메소드로 왔을 경우 처리
-     *
-     * @param ex - LoginRequestNotPermissionException
-     * @return 405 METHOD_NOT_ALLOWED
-     */
-//    @ExceptionHandler(value = {LoginRequestNotPermissionException.class})
-//    public ResponseEntity<CommonResponse<Void>> loginMethodNotPermissionExceptionHandler(
-//            LoginRequestNotPermissionException ex) {
-//        CommonHeader commonHeader =
-//                CommonHeader.builder().httpStatus(HttpStatus.METHOD_NOT_ALLOWED).resultMessage(ex.getMessage()).build();
-//        CommonResponse<Void> commonResponse = CommonResponse.<Void>builder().header(commonHeader).build();
-//        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(commonResponse);
-//    }
-
 }
