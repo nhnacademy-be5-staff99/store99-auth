@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .anyRequest()
                 .permitAll();
 
-        http.addFilterBefore(new FilterExceptionHandlerFilter(), CustomAuthenticationFilter.class);
+        http.addFilterBefore(new FilterExceptionHandlerFilter(objectMapper), CustomAuthenticationFilter.class);
 
         http.addFilterAt(customAuthenticationFilter(null), UsernamePasswordAuthenticationFilter.class);
 

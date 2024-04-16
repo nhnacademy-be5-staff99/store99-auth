@@ -22,7 +22,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class FilterExceptionHandlerFilter extends OncePerRequestFilter {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public FilterExceptionHandlerFilter(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
 
     /**
