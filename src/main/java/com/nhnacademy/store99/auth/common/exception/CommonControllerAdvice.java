@@ -2,8 +2,7 @@ package com.nhnacademy.store99.auth.common.exception;
 
 import com.nhnacademy.store99.auth.common.CommonHeader;
 import com.nhnacademy.store99.auth.common.CommonResponse;
-import com.nhnacademy.store99.auth.exception.LoginDtoNotParsingException;
-import java.io.IOException;
+import com.nhnacademy.store99.auth.exception.UserIdNotMatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -69,20 +68,31 @@ public class CommonControllerAdvice {
     }
 
     /**
-     * ParsingException Handler
+     * BadRequestException
      *
-     * <p>Dto 를 json 으로 파싱할 수 없을 시 처리
+     * <p>1. Dto 를 json 으로 파싱할 수 없을 시 처리
+     * <p>2. XUserTokenHeader 가 없을 시 처리
+     * <p>3. XUserToken 값이 비어있을 시 처리
      *
      * @param ex IOException
      * @return 400 BAD_REQUEST
      */
-    @ExceptionHandler(value = {LoginDtoNotParsingException.class})
-    public ResponseEntity<CommonResponse<String>> jsonParsingExceptionHandler(IOException ex) {
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<CommonResponse<String>> badRequestException(BadRequestException ex) {
         CommonHeader commonHeader =
                 CommonHeader.builder().httpStatus(HttpStatus.BAD_REQUEST).resultMessage(ex.getMessage()).build();
         CommonResponse<String>
                 commonResponse = CommonResponse.<String>builder().header(commonHeader).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(commonResponse);
+    }
+
+    @ExceptionHandler(UserIdNotMatchException.class)
+    public ResponseEntity<CommonResponse<Void>> userIdNotMatchExceptionHandler(UserIdNotMatchException ex) {
+        CommonHeader commonHeader =
+                CommonHeader.builder().httpStatus(HttpStatus.BAD_REQUEST).resultMessage(ex.getMessage()).build();
+        CommonResponse<Void>
+                commonResponse = CommonResponse.<Void>builder().header(commonHeader).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(commonResponse);
     }
 
 }

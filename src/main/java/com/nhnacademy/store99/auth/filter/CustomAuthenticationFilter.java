@@ -17,16 +17,19 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @author Ahyeon Song
  */
+@Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public static final String EXP_HEADER = "Expires";
@@ -124,6 +127,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         response.setHeader(TOKEN_HEADER, BEARER_PREFIX + accessToken);
         response.setHeader(EXP_HEADER, String.valueOf(new Date().getTime() + JwtUtil.ACCESS_TOKEN_EXPIRED_TIME));
+
+        // Authentication 객체를 SecurityContext에 저장
+        SecurityContextHolder.getContext().setAuthentication(authResult);
+        log.debug("저장된 authentication : {}", SecurityContextHolder.getContext());
     }
 
 }
