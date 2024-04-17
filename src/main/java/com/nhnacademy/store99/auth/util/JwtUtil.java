@@ -28,9 +28,9 @@ public class JwtUtil {
 
     public static final String ACCESS_TOKEN = "access-token";
     public static final String REFRESH_TOKEN = "refresh-token";
-    private static final String BEARER_PREFIX = "Bearer";
     public static final long ACCESS_TOKEN_EXPIRED_TIME = Duration.ofHours(1).toMillis();
     public static final long REFRESH_TOKEN_EXPIRED_TIME = Duration.ofDays(7).toMillis();
+    private static final String BEARER_PREFIX = "Bearer";
     private final String secretKey;
 
     public JwtUtil(JwtProperties jwtProperties) {
