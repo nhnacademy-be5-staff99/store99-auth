@@ -5,6 +5,7 @@ import com.nhnacademy.store99.auth.common.CommonHeader;
 import com.nhnacademy.store99.auth.common.CommonResponse;
 import com.nhnacademy.store99.auth.dto.LoginRequest;
 import com.nhnacademy.store99.auth.exception.LoginDtoNotParsingException;
+import com.nhnacademy.store99.auth.exception.LoginRequestNotPermissionException;
 import com.nhnacademy.store99.auth.provider.CustomAuthenticationProvider;
 import com.nhnacademy.store99.auth.service.JwtTokenService;
 import com.nhnacademy.store99.auth.util.JwtUtil;
@@ -12,8 +13,11 @@ import java.io.IOException;
 import java.util.Date;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,6 +41,25 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         this.authenticationProvider = authenticationProvider;
         this.jwtTokenService = jwtTokenService;
         this.objectMapper = objectMapper;
+    }
+
+    /**
+     * 로그인 url 접근 제한을 위한 filter
+     *
+     * <p>/v1/auth/login 요청이 POST 일때만 filter 통과
+     * <p>다른 메소드인 경우, custom exception 에 따라 405 METHOD_NOT_ALLOWED error 반환
+     *
+     * @throws LoginRequestNotPermissionException
+     */
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+        if (!httpRequest.getMethod().equalsIgnoreCase(HttpMethod.POST.name())) {
+            throw new LoginRequestNotPermissionException(httpRequest.getMethod());
+        }
+        super.doFilter(request, response, chain);
     }
 
     /**

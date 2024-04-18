@@ -2,6 +2,7 @@ package com.nhnacademy.store99.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.store99.auth.filter.CustomAuthenticationFilter;
+import com.nhnacademy.store99.auth.filter.FilterExceptionHandlerFilter;
 import com.nhnacademy.store99.auth.provider.CustomAuthenticationProvider;
 import com.nhnacademy.store99.auth.service.CustomUserDetailService;
 import com.nhnacademy.store99.auth.service.JwtTokenService;
@@ -54,6 +55,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
                 .anyRequest()
                 .permitAll();
+
+        http.addFilterBefore(new FilterExceptionHandlerFilter(objectMapper), CustomAuthenticationFilter.class);
 
         http.addFilterAt(customAuthenticationFilter(null), UsernamePasswordAuthenticationFilter.class);
 
