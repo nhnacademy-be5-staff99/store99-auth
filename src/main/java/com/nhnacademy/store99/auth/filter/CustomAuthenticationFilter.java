@@ -5,6 +5,7 @@ import com.nhnacademy.store99.auth.common.CommonHeader;
 import com.nhnacademy.store99.auth.common.CommonResponse;
 import com.nhnacademy.store99.auth.dto.LoginRequest;
 import com.nhnacademy.store99.auth.exception.LoginDtoNotParsingException;
+import com.nhnacademy.store99.auth.exception.LoginRequestNotPermissionException;
 import com.nhnacademy.store99.auth.provider.CustomAuthenticationProvider;
 import com.nhnacademy.store99.auth.service.JwtTokenService;
 import com.nhnacademy.store99.auth.util.JwtUtil;
@@ -12,17 +13,23 @@ import java.io.IOException;
 import java.util.Date;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @author Ahyeon Song
  */
+@Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public static final String EXP_HEADER = "Expires";
@@ -37,6 +44,25 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         this.authenticationProvider = authenticationProvider;
         this.jwtTokenService = jwtTokenService;
         this.objectMapper = objectMapper;
+    }
+
+    /**
+     * 로그인 url 접근 제한을 위한 filter
+     *
+     * <p>/v1/auth/login 요청이 POST 일때만 filter 통과
+     * <p>다른 메소드인 경우, custom exception 에 따라 405 METHOD_NOT_ALLOWED error 반환
+     *
+     * @throws LoginRequestNotPermissionException
+     */
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+        if (!httpRequest.getMethod().equalsIgnoreCase(HttpMethod.POST.name())) {
+            throw new LoginRequestNotPermissionException(httpRequest.getMethod());
+        }
+        super.doFilter(request, response, chain);
     }
 
     /**
@@ -101,6 +127,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         response.setHeader(TOKEN_HEADER, BEARER_PREFIX + accessToken);
         response.setHeader(EXP_HEADER, String.valueOf(new Date().getTime() + JwtUtil.ACCESS_TOKEN_EXPIRED_TIME));
+
+        // Authentication 객체를 SecurityContext에 저장
+        SecurityContextHolder.getContext().setAuthentication(authResult);
+        log.debug("저장된 authentication : {}", SecurityContextHolder.getContext());
     }
 
 }

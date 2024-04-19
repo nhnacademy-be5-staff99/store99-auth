@@ -3,8 +3,7 @@ package com.nhnacademy.store99.auth.util;
 import com.nhnacademy.store99.auth.property.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -31,6 +30,7 @@ public class JwtUtil {
     public static final String REFRESH_TOKEN = "refresh-token";
     public static final long ACCESS_TOKEN_EXPIRED_TIME = Duration.ofHours(1).toMillis();
     public static final long REFRESH_TOKEN_EXPIRED_TIME = Duration.ofDays(7).toMillis();
+    private static final String BEARER_PREFIX = "Bearer";
     private final String secretKey;
 
     public JwtUtil(JwtProperties jwtProperties) {
@@ -110,10 +110,11 @@ public class JwtUtil {
      * @return Claims claims
      */
     public Claims getClaims(String token) {
+        token = removeBearerPrefix(token);
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
@@ -124,10 +125,11 @@ public class JwtUtil {
      * @return String UUID
      */
     public String getUUID(String token) {
+        token = removeBearerPrefix(token);
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody()
                 .get("UUID", String.class);
     }
@@ -140,10 +142,11 @@ public class JwtUtil {
      * @return Date expiredTime
      */
     public Date getExpiredTime(String token) {
+        token = removeBearerPrefix(token);
         return Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody()
                 .getExpiration();
     }
@@ -156,18 +159,32 @@ public class JwtUtil {
      * @return true, false
      */
     public boolean isValidToken(String token) {
+        token = removeBearerPrefix(token);
         try {
-            Jwt<Header, Claims> claimsJwt = Jwts.parserBuilder()
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
                     .setSigningKey(key())
                     .build()
-                    .parseClaimsJwt(token);
-            return claimsJwt.getBody().getExpiration().before(new Date());
+                    .parseClaimsJws(token);
+            return claimsJws.getBody().getExpiration().after(new Date());
 
         } catch (SignatureException | MalformedJwtException e) {
             throw new SignatureException("올바르지 않은 서명", e);
         } catch (ExpiredJwtException e) {
             throw new JwtException("사용 기간이 만료된 토큰", e);
         }
+    }
+
+    /**
+     * 접두사 Bearer 삭제
+     *
+     * @param token
+     * @return Bearer 를 제외한 token
+     */
+    private String removeBearerPrefix(String token) {
+        if (token.startsWith(BEARER_PREFIX)) {
+            return token.substring(BEARER_PREFIX.length()).trim();
+        }
+        return token;
     }
 
 
