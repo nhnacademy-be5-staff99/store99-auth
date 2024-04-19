@@ -3,6 +3,8 @@ package com.nhnacademy.store99.auth.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.store99.auth.filter.CustomAuthenticationFilter;
 import com.nhnacademy.store99.auth.filter.FilterExceptionHandlerFilter;
+import com.nhnacademy.store99.auth.handler.CustomLogoutHandler;
+import com.nhnacademy.store99.auth.handler.CustomLogoutSuccessHandler;
 import com.nhnacademy.store99.auth.provider.CustomAuthenticationProvider;
 import com.nhnacademy.store99.auth.service.CustomUserDetailService;
 import com.nhnacademy.store99.auth.service.JwtTokenService;
@@ -25,10 +27,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     private final CustomUserDetailService userDetailService;
+    private final CustomLogoutHandler customLogoutHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
     private final ObjectMapper objectMapper;
 
-    public SecurityConfig(CustomUserDetailService userDetailService, ObjectMapper objectMapper) {
+    public SecurityConfig(CustomUserDetailService userDetailService, CustomLogoutHandler customLogoutHandler,
+                          CustomLogoutSuccessHandler customLogoutSuccessHandler,
+                          ObjectMapper objectMapper) {
         this.userDetailService = userDetailService;
+        this.customLogoutHandler = customLogoutHandler;
+        this.customLogoutSuccessHandler = customLogoutSuccessHandler;
         this.objectMapper = objectMapper;
     }
 
@@ -43,14 +51,11 @@ public class SecurityConfig {
         http.formLogin()
                 .disable();
 
-        http.logout()
-                .disable();
-
         http.httpBasic()
                 .disable();
 
         http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
         http.authorizeHttpRequests()
                 .anyRequest()
@@ -59,6 +64,12 @@ public class SecurityConfig {
         http.addFilterBefore(new FilterExceptionHandlerFilter(objectMapper), CustomAuthenticationFilter.class);
 
         http.addFilterAt(customAuthenticationFilter(null), UsernamePasswordAuthenticationFilter.class);
+
+        http.logout()
+                .logoutUrl("/v1/auth/logout")
+                .addLogoutHandler(customLogoutHandler)
+                .logoutSuccessHandler(customLogoutSuccessHandler)
+                .permitAll();
 
         return http.build();
     }

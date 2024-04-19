@@ -48,4 +48,29 @@ public class JwtTokenService {
         return accessToken;
     }
 
+    /**
+     * X-USER-TOKEN 을 parsing 하고, 유효성 검사를 하는 메소드
+     *
+     * <p>1. 토큰 유효성 검사
+     * <p>2. Redis 에서 uuid 삭제
+     *
+     * @param token
+     */
+    public void tokenDestroy(String token) {
+
+        // 토큰 만료기간 검사
+        boolean isValid = jwtUtil.isValidToken(token);
+
+        if (!isValid) {
+            log.debug("로그아웃 경고 : 토큰 만료");
+            return;
+        }
+
+        // redis 에 uuid 가 있는 지 확인
+        String uuid = jwtUtil.getUUID(token);
+
+        Boolean deleteResult = redisTemplate.delete(uuid);
+        log.debug("Redis 삭제 결과 : uuid - {}, {}", uuid, deleteResult);
+    }
+
 }
